@@ -1,0 +1,56 @@
+#!/bin/bash
+
+# Create group
+egrep -i "^${GNAME}" /etc/group;
+if [ $? -ne 0 ]; then
+  echo "${GNAME}:x:${GID}:${UNAME}" >> /etc/group
+fi
+
+# Create user
+if ! id "${UNAME}" >/dev/null 2>&1; then
+  echo "${UNAME}:x:${UID}:${GID}:${UNAME},,,:${UHOME}:${SHELL}" >> /etc/passwd
+  echo "${UNAME}::17032:0:99999:7:::" >> /etc/shadow
+fi
+
+# Create HOME dir
+if [ -d "${UHOME}" ]
+then
+  home_owner="$(stat -c '%U' ${UHOME})"
+  if [ $(id -u ${UNAME}) -ne $(id -u ${home_owner}) ]; then
+    chown "${UID}":"${GID}" -R ${UHOME}
+  fi
+else
+  mkdir -p "${UHOME}"
+  chown "${UID}":"${GID}" "${UHOME}"
+fi
+
+# SSH
+sed -i "s/^Port .*$/Port ${SSHD_PORT}/" "/etc/ssh/sshd_config"
+mkdir -p "${UHOME}/.ssh"
+cat /authorized_keys >> "${UHOME}/.ssh/authorized_keys"
+chmod 600 -R "${UHOME}/.ssh"
+chmod 700 "${UHOME}/.ssh"
+
+# Xpra mmap
+mkdir -p /tmp/spacemacs-mmap
+chown "${UID}":"${GID}" -R "${UHOME}/.ssh" /var/run/xpra /tmp/spacemacs-mmap
+
+export XDG_RUNTIME_DIR=/tmp/xdg
+mkdir -p "${XDG_RUNTIME_DIR}" "/run/user/${UID}/"
+chown "${UID}":"${GID}" "${XDG_RUNTIME_DIR}" "/run/user/${UID}/"
+
+if [ "$START_XORG" == "yes" ]; then
+	chmod 1777 /tmp/.X11-unix
+	Xorg\
+	  +extension RANDR\
+	  +extension RENDER\
+	  -config /etc/xpra/xorg.conf\
+	  -dpi $XORG_DPI\
+	  -logfile /tmp/Xorg.log\
+	  -nolisten tcp\
+	  -noreset\
+	  -xinerama &
+fi
+
+/usr/sbin/sshd
+su-exec "${UNAME}" bash xpra_start "$@"

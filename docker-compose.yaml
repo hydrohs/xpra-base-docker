@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  xpra_base: 
+    container_name: xpra_base
+    build: .
+    environment:
+      - XPRA_HTML=yes
+      - DISPLAY=:37
+    ports:
+      - "2201:22"
+      - "10001:10000"
+    volumes:
+      - ~/.ssh/authorized_keys:/authorized_keys:ro
