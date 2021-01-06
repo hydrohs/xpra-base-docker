@@ -130,4 +130,28 @@ COPY rootfs/ /
 
 EXPOSE $SSHD_PORT $XPRA_TCP_PORT
 
+ENV DISPLAY=:10 \
+    SHELL=/bin/bash \
+    SSHD_PORT=22 \
+    XPRA_HTML=on \
+    XPRA_MODE=start \
+    XPRA_READONLY=no \
+    XORG_DPI=96 \
+    XPRA_COMPRESS=0 \
+    XPRA_DPI=0 \
+    XPRA_ENCODING=rgb \
+    XPRA_HTML_DPI=96 \
+    XPRA_KEYBOARD_SYNC=yes \
+    XPRA_MMAP=yes \
+    XPRA_SHARING=yes \
+    XPRA_TCP_PORT=10000 \
+    UID=1000 \
+    GID=1000 \
+    GNAME=xpra \
+    UNAME=xpra \
+    UHOME=/home/xpra \
+    XDG_DATA_HOME=/config/data \
+    XDG_CONFIG_HOME=/config/config \
+    XDG_CACHE_HOME=/config/cache
+
 ENTRYPOINT ["/init"]
