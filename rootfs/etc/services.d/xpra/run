@@ -6,12 +6,14 @@ su-exec "${UNAME}" xpra $XPRA_MODE $DISPLAY\
   --encoding="${XPRA_ENCODING}"\
   --html="${XPRA_HTML}"\
   --keyboard-sync="${XPRA_KEYBOARD_SYNC}"\
-  --microphone=no\
+  --microphone=disabled\
   --mmap="${XPRA_MMAP}"\
   --no-daemon\
   --printing=no\
   --pulseaudio=no\
   --readonly="${XPRA_READONLY}"\
   --sharing="${XPRA_SHARING}"\
-  --speaker=no\
-  --webcam=no
+  --speaker=disabled\
+  --notifications=no\
+  --clipboard=yes\
+  --system-tray=no\

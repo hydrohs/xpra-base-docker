@@ -1,6 +1,6 @@
 FROM alpine AS xpra-base
 
-ENV XPRA_VERSION=4.0.5
+ARG XPRA_VERSION=4.0.6
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v2.1.0.2/s6-overlay-amd64.tar.gz /tmp
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
@@ -26,6 +26,7 @@ RUN add-pkg \
     ttf-droid \
     ttf-droid-nonlatin \
     x264 \
+    x265 \
     xauth \
     xhost \
     xorg-server \
@@ -56,6 +57,7 @@ RUN add-pkg \
     python3-dev \
     util-macros \
     x264-dev \
+    x265-dev \
     xorg-server-dev \
     yasm \
 && git clone https://github.com/ncopa/su-exec.git \
@@ -64,7 +66,7 @@ RUN add-pkg \
     && make \
     && chmod 770 su-exec \
     && mv su-exec /usr/sbin/ \
-&& git clone https://gitlab.freedesktop.org/xorg/driver/xf86-video-dummy.git \
+&& git clone https://gitea.lan.hydrohs.com/Hydrohs/xf86-video-dummy \
     /tmp/xf86-video-dummy \
     && cd /tmp/xf86-video-dummy \
     && libtoolize \
@@ -97,22 +99,22 @@ RUN add-pkg \
     --with-dbus \
     --with-enc_ffmpeg \
     --with-enc_x264 \
+    --with-enc_x265 \
+    --with-dec_avcodec2 \
+    --with-opengl \
     --with-gtk_x11 \
     --with-pillow \
     --with-server \
     --with-vpx \
     --with-vsock \
     --with-x11 \
+    --without-uinput \
     --without-client \
-    --without-csc_libyuv \
     --without-cuda_kernels \
     --without-cuda_rebuild \
-    --without-dec_avcodec2 \
-    --without-enc_x265 \
+    --without-csc_libyuv \
     --without-mdns \
-    --without-opengl \
     --without-printing \
-    --without-uinput \
     --without-sound \
     --without-strict \
     --without-webcam \
@@ -125,32 +127,6 @@ RUN add-pkg \
     && ssh-keygen -A
 
 COPY rootfs/ /
-
-ENV DISPLAY=":14"            \
-    SHELL="/bin/bash"        \
-    SSHD_PORT="22"           \
-    START_XORG="yes"         \
-    XPRA_HTML="no"           \
-    XPRA_MODE="start"        \
-    XPRA_READONLY="no"       \
-    XORG_DPI="96"            \
-    XPRA_COMPRESS="0"        \
-    XPRA_DPI="0"             \
-    XPRA_ENCODING="rgb"      \
-    XPRA_HTML_DPI="96"       \
-    XPRA_KEYBOARD_SYNC="yes" \
-    XPRA_MMAP="yes"          \
-    XPRA_SHARING="yes"       \
-    XPRA_TCP_PORT="10000"
-
-ENV GID="1000"         \
-    GNAME="xpra"       \
-    UHOME="/home/xpra" \
-    UID="1000"         \
-    UNAME="xpra" \
-    XDG_DATA_HOME=/config/data \
-    XDG_CONFIG_HOME=/config/config \
-    XDG_CACHE_HOME=/config/cache
 
 EXPOSE $SSHD_PORT $XPRA_TCP_PORT
 

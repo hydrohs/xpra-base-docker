@@ -24,6 +24,12 @@ else
   chown "${UID}":"${GID}" "${UHOME}"
 fi
 
+# Fix permissions on config volume
+if [ -d /config ]
+then
+  chown -R "${UNAME}":"${GNAME}" /config;
+fi
+
 # SSH
 sed -i "s/^Port .*$/Port ${SSHD_PORT}/" "/etc/ssh/sshd_config"
 mkdir -p "${UHOME}/.ssh"
@@ -37,16 +43,3 @@ chown "${UID}":"${GID}" -R "${UHOME}/.ssh" /var/run/xpra
 export XDG_RUNTIME_DIR=/tmp/xdg
 mkdir -p "${XDG_RUNTIME_DIR}" "/run/user/${UID}/"
 chown "${UID}":"${GID}" "${XDG_RUNTIME_DIR}" "/run/user/${UID}/"
-
-if [ "$START_XORG" == "yes" ]; then
-	chmod 1777 /tmp/.X11-unix
-	Xorg\
-	  +extension RANDR\
-	  +extension RENDER\
-	  -config /etc/xpra/xorg.conf\
-	  -dpi $XORG_DPI\
-	  -logfile /tmp/Xorg.log\
-	  -nolisten tcp\
-	  -noreset\
-	  -xinerama &
-fi

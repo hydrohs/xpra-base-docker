@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv
+Xorg\
+    +extension RANDR\
+    +extension RENDER\
+    -config /etc/xpra/xorg.conf\
+    -dpi $XORG_DPI\
+    -logfile /tmp/Xorg.log\
+    -nolisten tcp\
+    -noreset\
+    -xinerama
+chmod 1777 /tmp/.X11-unix
