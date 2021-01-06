@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/with-contenv bash
 
 # Create group
 egrep -i "^${GNAME}" /etc/group;
@@ -32,8 +32,7 @@ chmod 600 -R "${UHOME}/.ssh"
 chmod 700 "${UHOME}/.ssh"
 
 # Xpra mmap
-mkdir -p /tmp/spacemacs-mmap
-chown "${UID}":"${GID}" -R "${UHOME}/.ssh" /var/run/xpra /tmp/spacemacs-mmap
+chown "${UID}":"${GID}" -R "${UHOME}/.ssh" /var/run/xpra
 
 export XDG_RUNTIME_DIR=/tmp/xdg
 mkdir -p "${XDG_RUNTIME_DIR}" "/run/user/${UID}/"
@@ -51,6 +50,3 @@ if [ "$START_XORG" == "yes" ]; then
 	  -noreset\
 	  -xinerama &
 fi
-
-/usr/sbin/sshd
-su-exec "${UNAME}" bash xpra_start "$@"

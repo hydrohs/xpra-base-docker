@@ -1,5 +1,5 @@
-#!/bin/bash
-TMPDIR=/tmp/spacemacs-mmap xpra $XPRA_MODE $DISPLAY\
+#!/usr/bin/with-contenv bash
+su-exec "${UNAME}" xpra $XPRA_MODE $DISPLAY\
   --bind-tcp="0.0.0.0:${XPRA_TCP_PORT}"\
   --compress="${XPRA_COMPRESS}"\
   --dpi="${XPRA_DPI}"\
@@ -14,5 +14,4 @@ TMPDIR=/tmp/spacemacs-mmap xpra $XPRA_MODE $DISPLAY\
   --readonly="${XPRA_READONLY}"\
   --sharing="${XPRA_SHARING}"\
   --speaker=no\
-  --start-child="${XPRA_START}"\
   --webcam=no
