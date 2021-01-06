@@ -8,4 +8,3 @@ Xorg\
     -nolisten tcp\
     -noreset\
     -xinerama
-chmod 1777 /tmp/.X11-unix

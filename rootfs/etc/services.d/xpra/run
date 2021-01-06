@@ -16,4 +16,4 @@ su-exec "${UNAME}" xpra $XPRA_MODE $DISPLAY\
   --speaker=disabled\
   --notifications=no\
   --clipboard=yes\
-  --system-tray=no\
+  --system-tray=no

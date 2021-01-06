@@ -1,6 +1,6 @@
 FROM alpine AS xpra-base
 
-ARG XPRA_VERSION=4.0.6
+ARG XPRA_VERSION=4.0.5
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v2.1.0.2/s6-overlay-amd64.tar.gz /tmp
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C /
