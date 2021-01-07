@@ -66,7 +66,7 @@ RUN add-pkg \
     && make \
     && chmod 770 su-exec \
     && mv su-exec /usr/sbin/ \
-&& git clone https://gitea.lan.hydrohs.com/Hydrohs/xf86-video-dummy \
+&& git clone https://github.com/hydrohs/xf86-video-dummy \
     /tmp/xf86-video-dummy \
     && cd /tmp/xf86-video-dummy \
     && libtoolize \
